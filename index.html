@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
   
   <!-- Font Awesome for Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGiOW03FZ1OFWVE5inMEga+E20R2Do8AmhceArAs8qichDJ+23aeRBaIbESH0g==">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGiOW03FZ1OFWVE5inMEga+E20R2Do8AmhceArAs8qichDJ+236MwOdCSSIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   
   <style>
     :root {
@@ -453,7 +453,7 @@
       outline: none;
       cursor: pointer;
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7c6a' stroke-width='1.8' fill='none'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7c6a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 12px center;
       padding-right: 32px;
@@ -634,10 +634,6 @@
 
     .bar-outlet {
       background: linear-gradient(90deg, #7a5c3a 0%, #c49a6c 100%);
-    }
-
-    .bar-incline {
-      background: linear-gradient(90deg, #d4773a 0%, #e2a020 100%);
     }
 
     .head-bar-value {
@@ -1002,547 +998,970 @@
       font-size: 12px;
     }
 
-    .hidden {
-      display: none !important;
+    /* ──────────────────────────────────
+       RESPONSIVE
+       ────────────────────────────────── */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 26px;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .field-row.triple {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .head-bar-label {
+        width: 100px;
+        font-size: 12px;
+      }
+
+      .result-total-value {
+        font-size: 36px;
+      }
+
+      .flow-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        margin-bottom: 16px;
+      }
+
+      .step-tab {
+        padding: 10px 4px;
+        font-size: 11px;
+      }
+
+      .step-num {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .step-label {
+        display: none;
+      }
+
+      .btn-row {
+        justify-content: center;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px 12px 40px;
+      }
+
+      header {
+        padding: 16px 12px 12px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+
+      .head-bar-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .head-bar-label {
+        width: 100%;
+      }
+
+      .head-bar-track {
+        width: 100%;
+      }
+
+      .result-total-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .result-total-value {
+        font-size: 32px;
+      }
+
+      .summary-table {
+        font-size: 12px;
+      }
+
+      .summary-table th,
+      .summary-table td {
+        padding: 8px;
+      }
+    }
+
+    /* ──────────────────────────────────
+       PRINT
+       ────────────────────────────────── */
+    @media print {
+      header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .btn-row {
+        display: none;
+      }
+
+      .steps {
+        display: none;
+      }
+
+      .section-panel {
+        display: block !important;
+      }
+
+      .result-card {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        page-break-inside: avoid;
+      }
+
+      .card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--border);
+      }
+
+      body {
+        background: white;
+      }
+
+      .container {
+        padding: 20px;
+      }
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="header-label">
-        <i class="fas fa-leaf"></i> KasetInno
-      </div>
-      <h1>คำนวณ <span>Head</span> ปั๊ม</h1>
-      <p class="header-sub">ระบบคำนวณหัดปั๊มน้ำการเกษตรอัจฉริยะ</p>
-      <div class="header-contact">
-        <a href="tel:+66">☎️ +66 XX-XXXX-XXXX</a>
-      </div>
+
+<header>
+  <div class="header-inner">
+    <div class="header-label">
+      <i class="fas fa-leaf"></i>
+      KasetInno เกษตรอินโน · ระบบน้ำการเกษตร
     </div>
-  </header>
-
-  <div class="container">
-    <!-- STEP TABS -->
-    <div class="steps">
-      <button class="step-tab active" data-step="1">
-        <span class="step-num">1</span>
-        <span class="step-label">เลือกประเภท</span>
-      </button>
-      <button class="step-tab" data-step="2">
-        <span class="step-num">2</span>
-        <span class="step-label">ป้อนข้อมูล</span>
-      </button>
-      <button class="step-tab" data-step="3">
-        <span class="step-num">3</span>
-        <span class="step-label">ผลลัพธ์</span>
-      </button>
+    <h1>คำนวณ <span>Head ปั๊ม</span></h1>
+    <div class="header-sub">หน่วย : เมตร (ม.) | Single Head Calculation System</div>
+    <div class="header-contact">
+      <a href="tel:08524903448">
+        <i class="fas fa-phone"></i> 085-2490348
+      </a>
+      <a href="tel:09250676941">
+        <i class="fas fa-phone"></i> 092-5067694
+      </a>
     </div>
+  </div>
+</header>
 
-    <!-- STEP 1: PUMP TYPE SELECTION -->
-    <div class="section-panel active" data-section="1">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">
-            <i class="fas fa-water"></i>
-          </div>
-          <div>
-            <div class="card-title">เลือกประเภทปั๊ม</div>
-            <div class="card-subtitle">เลือกประเภทของปั๊มน้ำที่คุณต้องการคำนวณ</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="toggle-group" id="pumpTypeGroup">
-            <button class="toggle-btn active" data-pump="centrifugal">
-              <span class="toggle-icon">⚙️</span>
-              ปั๊มเซนตริฟิวจัล
-            </button>
-            <button class="toggle-btn" data-pump="inclined">
-              <span class="toggle-icon">📐</span>
-              ปั๊มเอียง
-            </button>
-          </div>
+<div class="container">
 
-          <div class="info">
-            <i class="fas fa-info-circle"></i>
-            <span><strong>ปั๊มเซนตริฟิวจัล:</strong> เหมาะสำหรับการสูบน้ำจากต่ำไปสูงในระยะไกล | <strong>ปั๊มเอียง:</strong> เหมาะสำหรับการสูบน้ำจากบ่อ/คลอง ในระยะปานกลาง</span>
-          </div>
+  <!-- Step tabs -->
+  <div class="steps" id="stepTabs">
+    <button class="step-tab active" onclick="goStep(1)">
+      <span class="step-num">1</span>
+      <span class="step-label">Head แนวดิ่ง</span>
+    </button>
+    <button class="step-tab" onclick="goStep(2)">
+      <span class="step-num">2</span>
+      <span class="step-label">Head ท่อ</span>
+    </button>
+    <button class="step-tab" onclick="goStep(3)">
+      <span class="step-num">3</span>
+      <span class="step-label">Head จ่ายน้ำ</span>
+    </button>
+    <button class="step-tab" onclick="goStep(4)">
+      <span class="step-num">4</span>
+      <span class="step-label">ผลลัพธ์</span>
+    </button>
+  </div>
 
-          <div class="btn-row">
-            <button class="btn btn-primary" id="nextStep1">
-              ถัดไป <i class="fas fa-arrow-right"></i>
-            </button>
-          </div>
+  <!-- ══════════════════════════════════════════
+       STEP 1 — Vertical Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel active" id="step1">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">💧</div>
+        <div>
+          <div class="card-title">① Head จากระยะส่งน้ำแนวดิ่ง</div>
+          <div class="card-subtitle">เลือกประเภทปั๊มที่ใช้งาน และกรอกข้อมูลระยะทาง</div>
         </div>
       </div>
-    </div>
+      <div class="card-body">
 
-    <!-- STEP 2: INPUT DATA -->
-    <div class="section-panel" data-section="2">
-      <!-- CENTRIFUGAL PUMP INPUTS -->
-      <div class="pump-panel" data-pump="centrifugal">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">
-              <i class="fas fa-ruler-vertical"></i>
+        <div class="info">
+          <i class="fas fa-lightbulb"></i>
+          <div>Head แนวดิ่ง เป็นพลังงานที่ใช้ในการยกน้ำขึ้นจากที่ต่ำไปยังที่สูง</div>
+        </div>
+
+        <!-- Pump type toggle -->
+        <div class="toggle-group" style="margin-top: 16px;">
+          <button class="toggle-btn active" id="btnBaadal" onclick="setPumpType('borewell')">
+            <span class="toggle-icon">🕳️</span>ปั๊มบาดาล
+          </button>
+          <button class="toggle-btn" id="btnCentrifugal" onclick="setPumpType('centrifugal')">
+            <span class="toggle-icon">🌀</span>ปั๊มหอยโข่ง
+          </button>
+        </div>
+
+        <!-- Borewell fields -->
+        <div id="borewellFields">
+          <div class="field-row triple">
+            <div class="field">
+              <label><i class="fas fa-arrow-down"></i> ระยะสูบน้ำ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_pump_depth" placeholder="20" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
             </div>
-            <div>
-              <div class="card-title">ปั๊มเซนตริฟิวจัล - ป้อนข้อมูล</div>
-              <div class="card-subtitle">ใส่ค่าความสูงและความยาวท่อ</div>
+            <div class="field">
+              <label><i class="fas fa-water"></i> ระดับน้ำปากบ่อ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_well_level" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label><i class="fas fa-arrow-up"></i> ความสูงแนวดิ่ง <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_vertical_height" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
             </div>
           </div>
-          <div class="card-body">
+
+          <!-- Inclined pipe -->
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="hasInclined" onchange="toggleInclined()">
+            <label for="hasInclined"><i class="fas fa-sliders-h"></i> มีท่อเอียง (inclined pipe)</label>
+          </div>
+
+          <div id="inclinedFields" style="display:none;">
             <div class="field-row">
               <div class="field">
-                <label>ความสูงแนวดิ่ง <span class="unit">(ม.)</span></label>
+                <label>ความยาวท่อเอียง <span class="unit">(ม.)</span></label>
                 <div class="input-wrap">
-                  <input type="number" id="verticalHeightC" placeholder="0" step="0.1" min="0">
+                  <input type="number" id="b_inclined_len" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
                   <span class="input-unit">ม.</span>
                 </div>
               </div>
               <div class="field">
-                <label>ความยาวท่ออนุกรม <span class="unit">(ม.)</span></label>
+                <label>มุมองศา <span class="unit">(°)</span></label>
                 <div class="input-wrap">
-                  <input type="number" id="pipeLengthC" placeholder="0" step="0.1" min="0">
-                  <span class="input-unit">ม.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="field-row">
-              <div class="field">
-                <label>เส้นผ่านศูนย์กลางท่อ <span class="unit">(นิ้ว)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="pipeDiameterC" placeholder="0" step="0.5" min="0">
-                  <span class="input-unit">นิ้ว</span>
-                </div>
-              </div>
-              <div class="field">
-                <label>อัตราการไหลผ่าน <span class="unit">(ม³/ชม.)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="flowRateC" placeholder="0" step="0.1" min="0">
-                  <span class="input-unit">ม³/ชม.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="checkbox-wrapper">
-              <input type="checkbox" id="hasFittingsC" checked>
-              <label for="hasFittingsC">มีข้อต่อและอุปกรณ์เสริม (คิด Head สูญเสีย +10%)</label>
-            </div>
-
-            <div class="btn-row">
-              <button class="btn btn-outline" id="prevStep2">
-                <i class="fas fa-arrow-left"></i> ย้อนกลับ
-              </button>
-              <button class="btn btn-primary" id="calcC">
-                คำนวณ <i class="fas fa-calculator"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- INCLINED PUMP INPUTS -->
-      <div class="pump-panel hidden" data-pump="inclined">
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">
-              <i class="fas fa-sliders-h"></i>
-            </div>
-            <div>
-              <div class="card-title">ปั๊มเอียง - ป้อนข้อมูล</div>
-              <div class="card-subtitle">ใส่ค่าความเอียงและความยาวระบายน้ำ</div>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="field-row">
-              <div class="field">
-                <label>ความยาวจากบ่อถึงท้ายท่อ <span class="unit">(ม.)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="lengthI" placeholder="0" step="0.1" min="0">
-                  <span class="input-unit">ม.</span>
-                </div>
-              </div>
-              <div class="field">
-                <label>ความเอียง (มุม) <span class="unit">(องศา)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="angleI" placeholder="0" step="0.5" min="0" max="90">
+                  <input type="number" id="b_inclined_angle" placeholder="37" min="0" max="90" step="1" oninput="calcStep1()">
                   <span class="input-unit">°</span>
                 </div>
               </div>
             </div>
-
-            <div class="field-row">
-              <div class="field">
-                <label>เส้นผ่านศูนย์กลางท่อ <span class="unit">(นิ้ว)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="pipeDiameterI" placeholder="0" step="0.5" min="0">
-                  <span class="input-unit">นิ้ว</span>
-                </div>
-              </div>
-              <div class="field">
-                <label>อัตราการไหลผ่าน <span class="unit">(ม³/ชม.)</span></label>
-                <div class="input-wrap">
-                  <input type="number" id="flowRateI" placeholder="0" step="0.1" min="0">
-                  <span class="input-unit">ม³/ชม.</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="checkbox-wrapper">
-              <input type="checkbox" id="hasFittingsI" checked>
-              <label for="hasFittingsI">มีข้อต่อและอุปกรณ์เสริม (คิด Head สูญเสีย +5%)</label>
-            </div>
-
-            <div class="btn-row">
-              <button class="btn btn-outline" id="prevStep2">
-                <i class="fas fa-arrow-left"></i> ย้อนกลับ
-              </button>
-              <button class="btn btn-primary" id="calcI">
-                คำนวณ <i class="fas fa-calculator"></i>
-              </button>
+            <div class="tip">
+              <i class="fas fa-ruler"></i>
+              <div>วัดมุมด้วยแอปวัดมุม หรือแอป LING (เลือกระบบ Level)</div>
             </div>
           </div>
+
+          <div class="computed-inline" id="borewellFormula">
+            <span>Head แนวดิ่ง = ระยะสูบ + ปากบ่อ + ความสูงส่ง</span>
+            <span class="val" id="borewellResult">— ม.</span>
+          </div>
         </div>
+
+        <!-- Centrifugal fields -->
+        <div id="centrifugalFields" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label><i class="fas fa-water"></i> ความลึกหัวดูดจากผิวน้ำ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="c_suction_depth" placeholder="4" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label><i class="fas fa-arrow-up"></i> ความสูงส่งน้ำจากพื้นดิน <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="c_discharge_height" placeholder="2" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="computed-inline">
+            <span>Head แนวดิ่ง = ความลึกดูด + ความสูงส่ง</span>
+            <span class="val" id="centrifugalResult">— ม.</span>
+          </div>
+        </div>
+
       </div>
     </div>
 
-    <!-- STEP 3: RESULTS -->
-    <div class="section-panel" data-section="3">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">
-            <i class="fas fa-chart-bar"></i>
-          </div>
-          <div>
-            <div class="card-title">ผลลัพธ์การคำนวณ</div>
-            <div class="card-subtitle">Head ปั๊มที่ต้องการสำหรับระบบของคุณ</div>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="result-card">
-            <div class="result-title">
-              <i class="fas fa-chart-line"></i> Head ที่ต้องการ
-            </div>
-
-            <div class="head-stack">
-              <div class="head-bar-row">
-                <div class="head-bar-label">ความสูง</div>
-                <div class="head-bar-track">
-                  <div class="head-bar-fill bar-vertical" id="barVertical" style="width: 0%;">
-                    <span id="barVerticalVal">0</span>
-                  </div>
-                </div>
-                <div class="head-bar-value" id="verticalValue">0.00</div>
-              </div>
-
-              <div class="head-bar-row">
-                <div class="head-bar-label">ท่อ/แรงเสียดทาน</div>
-                <div class="head-bar-track">
-                  <div class="head-bar-fill bar-pipe" id="barPipe" style="width: 0%;">
-                    <span id="barPipeVal">0</span>
-                  </div>
-                </div>
-                <div class="head-bar-value" id="pipeValue">0.00</div>
-              </div>
-
-              <div class="head-bar-row" id="outletRowC">
-                <div class="head-bar-label">ความเร็วท้ายท่อ</div>
-                <div class="head-bar-track">
-                  <div class="head-bar-fill bar-outlet" id="barOutlet" style="width: 0%;">
-                    <span id="barOutletVal">0</span>
-                  </div>
-                </div>
-                <div class="head-bar-value" id="outletValue">0.00</div>
-              </div>
-
-              <div class="head-bar-row hidden" id="inclineRowI">
-                <div class="head-bar-label">การสูบจากท่อเอียง</div>
-                <div class="head-bar-track">
-                  <div class="head-bar-fill bar-incline" id="barIncline" style="width: 0%;">
-                    <span id="barInclineVal">0</span>
-                  </div>
-                </div>
-                <div class="head-bar-value" id="inclineValue">0.00</div>
-              </div>
-            </div>
-
-            <hr class="result-divider">
-
-            <div class="result-total-row">
-              <div class="result-total-label">Total Head Required</div>
-              <div>
-                <span class="result-total-value" id="totalHead">0.00</span>
-                <span class="result-total-unit">เมตร</span>
-              </div>
-            </div>
-
-            <div class="pump-selection">
-              <div class="pump-sel-label">ปั๊มที่เหมาะสม</div>
-              <div class="pump-sel-value" id="pumpModel">—</div>
-              <div class="pump-sel-sub" id="pumpSub">—</div>
-            </div>
-          </div>
-
-          <div class="btn-row">
-            <button class="btn btn-outline" id="backToEdit">
-              <i class="fas fa-edit"></i> แก้ไขข้อมูล
-            </button>
-            <button class="btn btn-primary" id="resetAll">
-              <i class="fas fa-redo"></i> เริ่มใหม่
-            </button>
-          </div>
-        </div>
-      </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">
+        ถัดไป: Head ท่อ <i class="fas fa-arrow-right"></i>
+      </button>
     </div>
   </div>
 
-  <script>
-    // ============================================================
-    // STATE & CONFIG
-    // ============================================================
-    let state = {
-      pumpType: 'centrifugal',
-      results: {}
-    };
+  <!-- ══════════════════════════════════════════
+       STEP 2 — Pipe Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔧</div>
+        <div>
+          <div class="card-title">② Head จากความยาวท่อ</div>
+          <div class="card-subtitle">กรอกความยาวท่อทุกส่วน แล้วเลือกขนาดท่อส่ง</div>
+        </div>
+      </div>
+      <div class="card-body">
 
-    // Pump selection data
-    const pumpCatalog = {
-      centrifugal: [
-        { maxHead: 10, model: 'CT-5', hp: '0.5 HP', desc: 'ท่อ 1 นิ้ว' },
-        { maxHead: 25, model: 'CT-10', hp: '1 HP', desc: 'ท่อ 1.5 นิ้ว' },
-        { maxHead: 50, model: 'CT-25', hp: '2.5 HP', desc: 'ท่อ 2 นิ้ว' },
-        { maxHead: 100, model: 'CT-50', hp: '5 HP', desc: 'ท่อ 2.5 นิ้ว' },
-        { maxHead: 150, model: 'CT-100', hp: '10 HP', desc: 'ท่อ 3 นิ้ว' }
-      ],
-      inclined: [
-        { maxHead: 8, model: 'IC-5', hp: '0.5 HP', desc: 'ท่อ 2 นิ้ว' },
-        { maxHead: 15, model: 'IC-10', hp: '1 HP', desc: 'ท่อ 2.5 นิ้ว' },
-        { maxHead: 30, model: 'IC-25', hp: '2 HP', desc: 'ท่อ 3 นิ้ว' },
-        { maxHead: 50, model: 'IC-50', hp: '3 HP', desc: 'ท่อ 3.5 นิ้ว' }
-      ]
-    };
+        <div class="warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div><strong>ห้ามลดขนาดท่อส่ง</strong> — ความยาวท่อรวม = ท่อแนวดิ่ง + แนวนอน + แนวเอียง ทุกส่วนรวมกัน</div>
+        </div>
 
-    // ============================================================
-    // UTILITY FUNCTIONS
-    // ============================================================
-    function showStep(stepNum) {
-      document.querySelectorAll('.section-panel').forEach(el => el.classList.remove('active'));
-      document.querySelector(`[data-section="${stepNum}"]`).classList.add('active');
+        <div style="margin-top: 16px;">
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+            <i class="fas fa-info-circle"></i> Head ท่อ คำนวณจากความยาวท่อรวมหารด้วยขนาดท่อ
+          </p>
+        </div>
 
-      document.querySelectorAll('.step-tab').forEach((tab, idx) => {
-        tab.classList.remove('active', 'done');
-        if (idx < stepNum - 1) tab.classList.add('done');
-        if (idx === stepNum - 1) tab.classList.add('active');
-      });
+        <div class="pipe-segments" id="pipeSegments">
+          <div class="pipe-row">
+            <span class="pipe-icon">⬆️</span>
+            <span class="pipe-label">แนวดิ่ง</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_vertical" placeholder="4" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+          <div class="pipe-row">
+            <span class="pipe-icon">➡️</span>
+            <span class="pipe-label">แนวนอน</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_horizontal" placeholder="10" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+          <div class="pipe-row">
+            <span class="pipe-icon">↗️</span>
+            <span class="pipe-label">แนวเอียง</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_inclined" placeholder="6" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label><i class="fas fa-ruler-combined"></i> ขนาดท่อส่ง</label>
+          <select class="native-select" id="pipe_size" onchange="calcPipe()">
+            <option value="15">1.5 นิ้ว (÷ 15)</option>
+            <option value="20" selected>2 นิ้ว (÷ 20)</option>
+            <option value="30">3 นิ้ว (÷ 30)</option>
+            <option value="40">4 นิ้ว (÷ 40)</option>
+          </select>
+        </div>
+
+        <div class="computed-inline">
+          <span>
+            <span id="pipeFormula">ความยาวรวม ÷ 20</span>
+            &nbsp;=&nbsp;
+            <span id="pipeTotalLen" style="font-weight:600;">0</span> ม.
+          </span>
+          <span class="val" id="pipeResult">— ม.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">
+        <i class="fas fa-arrow-left"></i> ย้อนกลับ
+      </button>
+      <button class="btn btn-primary" onclick="goStep(3)">
+        ถัดไป: Head จ่ายน้ำ <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 3 — Outlet Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🌱</div>
+        <div>
+          <div class="card-title">③ Head จากรูปแบบการจ่ายน้ำ</div>
+          <div class="card-subtitle">เลือกหัวจ่ายน้ำที่ใช้ในแปลง</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btnPVC" onclick="setOutletType('pvc')">
+            <span class="toggle-icon">🚿</span>ปากท่อ PVC
+          </button>
+          <button class="toggle-btn" id="btnDripper" onclick="setOutletType('dripper')">
+            <span class="toggle-icon">💧</span>หัวน้ำหยด
+          </button>
+          <button class="toggle-btn" id="btnSprinkler" onclick="setOutletType('sprinkler')">
+            <span class="toggle-icon">🌧️</span>สปริงเกอร์
+          </button>
+        </div>
+
+        <!-- PVC -->
+        <div id="outletPVC">
+          <div class="computed-inline">
+            <span>ปากท่อ PVC ไม่มีแรงดันเพิ่ม</span>
+            <span class="val">0 ม.</span>
+          </div>
+        </div>
+
+        <!-- Dripper -->
+        <div id="outletDripper" style="display:none;">
+          <div class="field">
+            <label><i class="fas fa-droplet"></i> แรงดันใช้งานหัวน้ำหยด <span class="unit">(บาร์)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="dripper_bar" placeholder="0.5" min="0" step="0.1" oninput="calcOutlet()">
+              <span class="input-unit">บาร์</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="fas fa-search"></i>
+            <div>ค้นหาแรงดันใช้งาน (บาร์) ได้จาก Google หรือ ChatGPT ตามรุ่นหัวน้ำหยดที่ใช้งาน</div>
+          </div>
+          <div class="computed-inline">
+            <span>แรงดัน (บาร์) × 10 = Head</span>
+            <span class="val" id="dripperResult">— ม.</span>
+          </div>
+        </div>
+
+        <!-- Sprinkler -->
+        <div id="outletSprinkler" style="display:none;">
+          <div class="field">
+            <label><i class="fas fa-shower"></i> แรงดันใช้งานสปริงเกอร์ <span class="unit">(บาร์)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="sprinkler_bar" placeholder="1.0" min="0" step="0.1" oninput="calcOutlet()">
+              <span class="input-unit">บาร์</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="fas fa-search"></i>
+            <div>ค้นหาแรงดันใช้งาน (บาร์) ได้จาก Google หรือ ChatGPT ตามรุ่นสปริงเกอร์ที่ใช้งาน</div>
+          </div>
+          <div class="computed-inline">
+            <span>แรงดัน (บาร์) × 10 = Head</span>
+            <span class="val" id="sprinklerResult">— ม.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Flow calculation (bonus) -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div>
+          <div class="card-title">คำนวณพื้นที่ / จำนวนโซน (เพิ่มเติม)</div>
+          <div class="card-subtitle">ใส่อัตราการไหลของปั๊มที่เลือก</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="field-row">
+          <div class="field">
+            <label><i class="fas fa-water"></i> อัตราการไหลปั๊ม <span class="unit">(คิว/ชม)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_pump" placeholder="12" min="0" step="0.1" oninput="calcFlow()">
+              <span class="input-unit">คิว/ชม</span>
+            </div>
+          </div>
+
+          <div id="fieldDripperArea" class="field">
+            <label><i class="fas fa-field"></i> พื้นที่ทั้งหมด <span class="unit">(ไร่)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_area" placeholder="4" min="0" step="0.1" oninput="calcFlow()">
+              <span class="input-unit">ไร่</span>
+            </div>
+          </div>
+
+          <div id="fieldSprinklerCount" class="field" style="display:none;">
+            <label><i class="fas fa-hashtag"></i> จำนวนหัวทั้งหมด <span class="unit">(หัว)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_sprinkler_total" placeholder="300" min="0" step="1" oninput="calcFlow()">
+              <span class="input-unit">หัว</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="fieldSprinklerRate" style="display:none; margin-bottom:12px;">
+          <div class="field">
+            <label><i class="fas fa-shower"></i> อัตราการไหลต่อหัว <span class="unit">(L/H)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_sprinkler_per_head" placeholder="120" min="0" step="1" oninput="calcFlow()">
+              <span class="input-unit">L/H</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="flowResult" style="display:none;" class="flow-result">
+          <div class="flow-result-title">
+            <i class="fas fa-chart-bar"></i> ผลการคำนวณการไหล
+          </div>
+          <div class="flow-grid" id="flowGrid"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">
+        <i class="fas fa-arrow-left"></i> ย้อนกลับ
+      </button>
+      <button class="btn btn-primary" onclick="goStep(4)">
+        ดูผลลัพธ์ <i class="fas fa-eye"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 4 — Summary
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step4">
+
+    <div class="result-card">
+      <div class="result-title">
+        <i class="fas fa-chart-pie"></i> สรุปผล HEAD ปั๊ม
+      </div>
+
+      <div class="head-stack">
+        <!-- Vertical -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">① Head แนวดิ่ง</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-vertical" id="barVertical" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valVertical">—</div>
+        </div>
+        <!-- Pipe -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">② Head ท่อ</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-pipe" id="barPipe" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valPipe">—</div>
+        </div>
+        <!-- Outlet -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">③ Head จ่ายน้ำ</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-outlet" id="barOutlet" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valOutlet">—</div>
+        </div>
+      </div>
+
+      <hr class="result-divider">
+
+      <div class="result-total-row">
+        <div class="result-total-label">HEAD ปั๊ม รวม</div>
+        <div>
+          <span class="result-total-value" id="totalHead">—</span>
+          <span class="result-total-unit">เมตร</span>
+        </div>
+      </div>
+
+      <div class="pump-selection">
+        <div class="pump-sel-label">เกณฑ์เลือกปั๊ม (Head Max × 70% > Head ปั๊ม)</div>
+        <div class="pump-sel-value" id="pumpMinHead">— ม.</div>
+        <div class="pump-sel-sub" id="pumpMinHeadSub">ต้องการปั๊มที่มี Head Max อย่างน้อย …</div>
+      </div>
+    </div>
+
+    <!-- Formula breakdown -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">
+        <div class="card-icon">🧮</div>
+        <div>
+          <div class="card-title">สูตรคำนวณ</div>
+          <div class="card-subtitle">รายละเอียดการคำนวณแต่ละองค์ประกอบ</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="summary-table" id="summaryTable">
+          <thead>
+            <tr>
+              <th>องค์ประกอบ</th>
+              <th style="text-align:right;">ค่า (ม.)</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="summaryBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="btn-row" style="justify-content:space-between;">
+      <button class="btn btn-reset" onclick="resetAll()">
+        <i class="fas fa-redo"></i> เริ่มใหม่
+      </button>
+      <button class="btn btn-outline" onclick="goStep(3)">
+        <i class="fas fa-arrow-left"></i> แก้ไข
+      </button>
+      <button class="btn btn-primary" onclick="printCalc()">
+        <i class="fas fa-print"></i> พิมพ์ / บันทึก
+      </button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════
+// State Management
+// ══════════════════════════════════════
+let state = {
+  pumpType: 'borewell',
+  outletType: 'pvc',
+  headVertical: 0,
+  headPipe: 0,
+  headOutlet: 0,
+};
+
+let currentStep = 1;
+
+// ══════════════════════════════════════
+// Step Navigation
+// ══════════════════════════════════════
+function goStep(n) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.remove('active', 'done');
+    const num = i + 1;
+    if (num < n) t.classList.add('done');
+    if (num === n) t.classList.add('active');
+  });
+
+  // Update step numbers
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    const sn = t.querySelector('.step-num');
+    if (t.classList.contains('done')) sn.innerHTML = '<i class="fas fa-check"></i>';
+    else sn.textContent = i + 1;
+  });
+
+  currentStep = n;
+  if (n === 4) renderResults();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════
+// Pump Type
+// ══════════════════════════════════════
+function setPumpType(type) {
+  state.pumpType = type;
+  document.getElementById('btnBaadal').classList.toggle('active', type === 'borewell');
+  document.getElementById('btnCentrifugal').classList.toggle('active', type === 'centrifugal');
+  document.getElementById('borewellFields').style.display = type === 'borewell' ? '' : 'none';
+  document.getElementById('centrifugalFields').style.display = type === 'centrifugal' ? '' : 'none';
+  calcStep1();
+}
+
+function toggleInclined() {
+  const checked = document.getElementById('hasInclined').checked;
+  document.getElementById('inclinedFields').style.display = checked ? '' : 'none';
+  calcStep1();
+}
+
+function calcStep1() {
+  if (state.pumpType === 'borewell') {
+    const pumpDepth = parseFloat(document.getElementById('b_pump_depth').value) || 0;
+    const wellLevel = parseFloat(document.getElementById('b_well_level').value) || 0;
+    const vertHeight = parseFloat(document.getElementById('b_vertical_height').value) || 0;
+    let inclinedH = 0;
+    
+    if (document.getElementById('hasInclined').checked) {
+      const len = parseFloat(document.getElementById('b_inclined_len').value) || 0;
+      const angle = parseFloat(document.getElementById('b_inclined_angle').value) || 0;
+      inclinedH = len * Math.sin(angle * Math.PI / 180);
     }
+    
+    const total = pumpDepth + wellLevel + vertHeight + inclinedH;
+    state.headVertical = total;
+    document.getElementById('borewellResult').textContent = total.toFixed(2) + ' ม.';
+  } else {
+    const suctionDepth = parseFloat(document.getElementById('c_suction_depth').value) || 0;
+    const dischHeight = parseFloat(document.getElementById('c_discharge_height').value) || 0;
+    const total = suctionDepth + dischHeight;
+    state.headVertical = total;
+    document.getElementById('centrifugalResult').textContent = total.toFixed(2) + ' ม.';
+  }
+}
 
-    function showPumpPanel(pumpType) {
-      document.querySelectorAll('.pump-panel').forEach(el => el.classList.add('hidden'));
-      document.querySelector(`[data-pump="${pumpType}"]`).classList.remove('hidden');
+// ══════════════════════════════════════
+// Pipe Head
+// ══════════════════════════════════════
+function calcPipe() {
+  const v = parseFloat(document.getElementById('pipe_vertical').value) || 0;
+  const h = parseFloat(document.getElementById('pipe_horizontal').value) || 0;
+  const inc = parseFloat(document.getElementById('pipe_inclined').value) || 0;
+  const total = v + h + inc;
+  const divisor = parseInt(document.getElementById('pipe_size').value) || 20;
+
+  document.getElementById('pipeTotalLen').textContent = total.toFixed(1);
+  document.getElementById('pipeFormula').textContent = `ความยาวรวม ÷ ${divisor}`;
+
+  const head = total / divisor;
+  state.headPipe = head;
+  document.getElementById('pipeResult').textContent = head.toFixed(2) + ' ม.';
+}
+
+// ══════════════════════════════════════
+// Outlet Type & Head
+// ══════════════════════════════════════
+function setOutletType(type) {
+  state.outletType = type;
+  
+  ['pvc', 'dripper', 'sprinkler'].forEach(t => {
+    const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+    const outlet = document.getElementById('outlet' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn) btn.classList.remove('active');
+    if (outlet) outlet.style.display = 'none';
+  });
+  
+  const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
+  const outlet = document.getElementById('outlet' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (btn) btn.classList.add('active');
+  if (outlet) outlet.style.display = '';
+
+  // Show/hide flow fields
+  document.getElementById('fieldDripperArea').style.display = (type === 'dripper') ? '' : 'none';
+  document.getElementById('fieldSprinklerCount').style.display = (type === 'sprinkler') ? '' : 'none';
+  document.getElementById('fieldSprinklerRate').style.display = (type === 'sprinkler') ? '' : 'none';
+
+  if (type === 'pvc') {
+    state.headOutlet = 0;
+  }
+  
+  calcOutlet();
+  calcFlow();
+}
+
+function calcOutlet() {
+  if (state.outletType === 'dripper') {
+    const bar = parseFloat(document.getElementById('dripper_bar').value) || 0;
+    state.headOutlet = bar * 10;
+    document.getElementById('dripperResult').textContent = state.headOutlet.toFixed(1) + ' ม.';
+  } else if (state.outletType === 'sprinkler') {
+    const bar = parseFloat(document.getElementById('sprinkler_bar').value) || 0;
+    state.headOutlet = bar * 10;
+    document.getElementById('sprinklerResult').textContent = state.headOutlet.toFixed(1) + ' ม.';
+  } else {
+    state.headOutlet = 0;
+  }
+}
+
+// ══════════════════════════════════════
+// Flow / Zone Calculation
+// ══════════════════════════════════════
+function calcFlow() {
+  const pumpFlow = parseFloat(document.getElementById('flow_pump').value) || 0;
+  
+  if (pumpFlow <= 0) {
+    document.getElementById('flowResult').style.display = 'none';
+    return;
+  }
+  
+  let items = [];
+  
+  if (state.outletType === 'dripper') {
+    const totalArea = parseFloat(document.getElementById('flow_area').value) || 0;
+    const areaPerCycle = pumpFlow / 6;
+    const zones = totalArea > 0 ? Math.ceil(totalArea / areaPerCycle) : '—';
+    
+    items = [
+      { label: 'อัตราการไหลปั๊ม', value: pumpFlow.toFixed(1), unit: 'คิว/ชม' },
+      { label: 'ไร่ที่ปั๊มทำงานได้ / รอบ', value: areaPerCycle.toFixed(2), unit: 'ไร่' },
+      { label: 'จำนวนโซน', value: typeof zones === 'number' ? zones : '—', unit: 'โซน' },
+      { label: 'อัตราต่อไร่', value: '6', unit: 'คิว/ชม/ไร่' },
+    ];
+  } else if (state.outletType === 'sprinkler') {
+    const totalHeads = parseFloat(document.getElementById('flow_sprinkler_total').value) || 0;
+    const perHeadLH = parseFloat(document.getElementById('flow_sprinkler_per_head').value) || 0;
+    const perHeadQ = perHeadLH / 1000;
+    const headsPerCycle = perHeadQ > 0 ? Math.floor(pumpFlow / perHeadQ) : 0;
+    const zones = (totalHeads > 0 && headsPerCycle > 0) ? Math.ceil(totalHeads / headsPerCycle) : '—';
+    
+    items = [
+      { label: 'อัตราการไหลปั๊ม', value: pumpFlow.toFixed(1), unit: 'คิว/ชม' },
+      { label: 'หัวที่ปั๊มทำงานได้ / รอบ', value: headsPerCycle || '—', unit: 'หัว' },
+      { label: 'จำนวนโซน', value: typeof zones === 'number' ? zones : '—', unit: 'โซน' },
+      { label: 'อัตราต่อหัว', value: perHeadQ ? perHeadQ.toFixed(3) : '—', unit: 'คิว/ชม' },
+    ];
+  } else {
+    document.getElementById('flowResult').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('flowResult').style.display = '';
+  document.getElementById('flowGrid').innerHTML = items.map(it => `
+    <div class="flow-item">
+      <div class="flow-item-label">${it.label}</div>
+      <div>
+        <span class="flow-item-value">${it.value}</span>
+        <span class="flow-item-unit">${it.unit}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════
+// Results Rendering
+// ══════════════════════════════════════
+function renderResults() {
+  const v = state.headVertical;
+  const p = state.headPipe;
+  const o = state.headOutlet;
+  const total = v + p + o;
+  const maxBar = Math.max(v, p, o, 1);
+
+  // Animate bars
+  setTimeout(() => {
+    setBar('barVertical', 'valVertical', v, maxBar);
+    setBar('barPipe', 'valPipe', p, maxBar);
+    setBar('barOutlet', 'valOutlet', o, maxBar);
+  }, 50);
+
+  // Update totals
+  document.getElementById('totalHead').textContent = total.toFixed(2);
+  const minHeadMax = total / 0.7;
+  document.getElementById('pumpMinHead').textContent = minHeadMax.toFixed(1) + ' ม.';
+  document.getElementById('pumpMinHeadSub').textContent =
+    `เลือกปั๊มที่มี Head Max ≥ ${minHeadMax.toFixed(1)} ม. (Head ปั๊ม ÷ 0.7)`;
+
+  // Build summary table
+  const pumpLabel = state.pumpType === 'borewell' ? 'Head แนวดิ่ง (บาดาล)' : 'Head แนวดิ่ง (หอยโข่ง)';
+  const pipeLabel = (() => {
+    const s = document.getElementById('pipe_size');
+    return `Head ท่อ (${s.options[s.selectedIndex].text.split(' ')[0]} นิ้ว)`;
+  })();
+  const outletLabels = {
+    pvc: 'Head จ่ายน้ำ (ปากท่อ)',
+    dripper: 'Head จ่ายน้ำ (หัวหยด)',
+    sprinkler: 'Head จ่ายน้ำ (สปริงเกอร์)'
+  };
+
+  const borewellNote = (() => {
+    if (state.pumpType !== 'borewell') return '';
+    const d = val('b_pump_depth'), w = val('b_well_level'), vh = val('b_vertical_height');
+    const hasInc = document.getElementById('hasInclined').checked;
+    if (hasInc) {
+      const l = val('b_inclined_len'), a = val('b_inclined_angle');
+      const ih = (l * Math.sin(a * Math.PI / 180)).toFixed(2);
+      return `${d} + ${w} + (${vh} + ${ih})`;
     }
+    return `${d} + ${w} + ${vh}`;
+  })();
 
-    function selectPumpModel(head, catalog) {
-      return catalog.find(p => head <= p.maxHead) || catalog[catalog.length - 1];
-    }
+  const centrifugalNote = (() => {
+    if (state.pumpType !== 'centrifugal') return '';
+    return `${val('c_suction_depth')} + ${val('c_discharge_height')}`;
+  })();
 
-    function updateResultDisplay(results) {
-      const { verticalHead, pipeHead, velocityHead, inclineHead, totalHead, pumpType } = results;
+  const pv = val('pipe_vertical'), ph = val('pipe_horizontal'), pi = val('pipe_inclined');
+  const pdiv = document.getElementById('pipe_size').value;
+  const pipeNote = `(${pv} + ${ph} + ${pi}) ÷ ${pdiv}`;
 
-      document.getElementById('verticalValue').textContent = verticalHead.toFixed(2);
-      document.getElementById('pipeValue').textContent = pipeHead.toFixed(2);
+  const outletNote = state.outletType === 'pvc' ? 'ไม่มีแรงดัน' :
+    state.outletType === 'dripper' ? `${val('dripper_bar')} บาร์ × 10` :
+    `${val('sprinkler_bar')} บาร์ × 10`;
 
-      if (pumpType === 'centrifugal') {
-        document.getElementById('outletValue').textContent = velocityHead.toFixed(2);
-        document.getElementById('outletRowC').classList.remove('hidden');
-        document.getElementById('inclineRowI').classList.add('hidden');
-      } else {
-        document.getElementById('inclineValue').textContent = inclineHead.toFixed(2);
-        document.getElementById('outletRowC').classList.add('hidden');
-        document.getElementById('inclineRowI').classList.remove('hidden');
-      }
+  const rows = [
+    [pumpLabel, v.toFixed(2), state.pumpType === 'borewell' ? borewellNote : centrifugalNote],
+    [pipeLabel, p.toFixed(2), pipeNote],
+    [outletLabels[state.outletType], o.toFixed(2), outletNote],
+    ['<strong>HEAD ปั๊ม รวม</strong>', `<strong>${total.toFixed(2)}</strong>`, ''],
+  ];
 
-      // Update progress bars
-      const maxHeadDisplay = totalHead * 1.2;
-      document.getElementById('barVertical').style.width = (verticalHead / maxHeadDisplay * 100) + '%';
-      document.getElementById('barPipe').style.width = (pipeHead / maxHeadDisplay * 100) + '%';
+  document.getElementById('summaryBody').innerHTML = rows.map((r, i) => `
+    <tr>
+      <td>${r[0]}</td>
+      <td class="numeric">${r[1]}</td>
+      <td class="note">${r[2]}</td>
+    </tr>
+  `).join('');
+}
 
-      if (pumpType === 'centrifugal') {
-        document.getElementById('barOutlet').style.width = (velocityHead / maxHeadDisplay * 100) + '%';
-      } else {
-        document.getElementById('barIncline').style.width = (inclineHead / maxHeadDisplay * 100) + '%';
-      }
+function setBar(barId, valId, value, maxVal) {
+  const pct = Math.max((value / maxVal) * 88, value > 0 ? 8 : 0);
+  const bar = document.getElementById(barId);
+  const val = document.getElementById(valId);
+  
+  bar.style.width = pct + '%';
+  bar.textContent = value > 0 ? value.toFixed(2) + ' ม.' : '';
+  val.textContent = value.toFixed(2) + ' ม.';
+}
 
-      document.getElementById('totalHead').textContent = totalHead.toFixed(2);
+function val(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
 
-      const catalog = pumpType === 'centrifugal' ? pumpCatalog.centrifugal : pumpCatalog.inclined;
-      const selectedPump = selectPumpModel(totalHead, catalog);
-      document.getElementById('pumpModel').textContent = selectedPump.model;
-      document.getElementById('pumpSub').textContent = `${selectedPump.hp} • ${selectedPump.desc}`;
-    }
+// ══════════════════════════════════════
+// Reset & Print
+// ══════════════════════════════════════
+function resetAll() {
+  if (!confirm('ต้องการเริ่มต้นใหม่ใช่หรือไม่?')) return;
+  
+  document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
+  document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+  
+  state = {
+    pumpType: 'borewell',
+    outletType: 'pvc',
+    headVertical: 0,
+    headPipe: 0,
+    headOutlet: 0
+  };
+  
+  setPumpType('borewell');
+  setOutletType('pvc');
+  document.getElementById('inclinedFields').style.display = 'none';
+  document.getElementById('flowResult').style.display = 'none';
+  
+  goStep(1);
+}
 
-    // ============================================================
-    // CALCULATION FUNCTIONS
-    // ============================================================
-    function calculateCentrifugal() {
-      const verticalHeight = parseFloat(document.getElementById('verticalHeightC').value) || 0;
-      const pipeLength = parseFloat(document.getElementById('pipeLengthC').value) || 0;
-      const pipeDiameter = parseFloat(document.getElementById('pipeDiameterC').value) || 0;
-      const flowRate = parseFloat(document.getElementById('flowRateC').value) || 0;
-      const hasFittings = document.getElementById('hasFittingsC').checked;
+function printCalc() {
+  window.print();
+}
 
-      let pipeHead = 0;
-      let velocityHead = 0;
+// ══════════════════════════════════════
+// Initialization
+// ══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  calcStep1();
+  calcPipe();
+});
+</script>
 
-      if (pipeDiameter > 0 && flowRate > 0) {
-        // Convert diameter from inches to meters
-        const diameterM = pipeDiameter * 0.0254;
-        const areaM2 = Math.PI * (diameterM / 2) ** 2;
-        
-        // Flow rate m³/s
-        const flowM3s = flowRate / 3600;
-        
-        // Velocity
-        const velocity = flowM3s / areaM2;
-        
-        // Pipe friction loss (simplified Darcy-Weisbach)
-        const f = 0.02; // friction factor
-        pipeHead = f * (pipeLength / diameterM) * (velocity ** 2) / (2 * 9.81);
-        
-        // Velocity head at outlet
-        velocityHead = (velocity ** 2) / (2 * 9.81);
-      }
-
-      // Apply fittings loss
-      if (hasFittings) {
-        pipeHead *= 1.1;
-      }
-
-      const totalHead = verticalHeight + pipeHead + velocityHead;
-
-      const results = {
-        verticalHead: verticalHeight,
-        pipeHead: pipeHead,
-        velocityHead: velocityHead,
-        inclineHead: 0,
-        totalHead: totalHead,
-        pumpType: 'centrifugal'
-      };
-
-      state.results = results;
-      updateResultDisplay(results);
-      showStep(3);
-    }
-
-    function calculateInclined() {
-      const length = parseFloat(document.getElementById('lengthI').value) || 0;
-      const angle = parseFloat(document.getElementById('angleI').value) || 0;
-      const pipeDiameter = parseFloat(document.getElementById('pipeDiameterI').value) || 0;
-      const flowRate = parseFloat(document.getElementById('flowRateI').value) || 0;
-      const hasFittings = document.getElementById('hasFittingsI').checked;
-
-      // Vertical lift due to inclination
-      const angleRad = (angle * Math.PI) / 180;
-      const verticalHeight = length * Math.sin(angleRad);
-
-      let pipeHead = 0;
-      let inclineHead = 0;
-
-      if (pipeDiameter > 0 && flowRate > 0) {
-        // Convert diameter from inches to meters
-        const diameterM = pipeDiameter * 0.0254;
-        const areaM2 = Math.PI * (diameterM / 2) ** 2;
-        
-        // Flow rate m³/s
-        const flowM3s = flowRate / 3600;
-        
-        // Velocity
-        const velocity = flowM3s / areaM2;
-        
-        // Pipe friction loss (simplified Darcy-Weisbach)
-        const f = 0.02;
-        pipeHead = f * (length / diameterM) * (velocity ** 2) / (2 * 9.81);
-        
-        // Incline resistance (pressure drop due to flow)
-        inclineHead = 0.5 * (velocity ** 2) / (2 * 9.81);
-      }
-
-      // Apply fittings loss
-      if (hasFittings) {
-        pipeHead *= 1.05;
-      }
-
-      const totalHead = verticalHeight + pipeHead + inclineHead;
-
-      const results = {
-        verticalHead: verticalHeight,
-        pipeHead: pipeHead,
-        velocityHead: 0,
-        inclineHead: inclineHead,
-        totalHead: totalHead,
-        pumpType: 'inclined'
-      };
-
-      state.results = results;
-      updateResultDisplay(results);
-      showStep(3);
-    }
-
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    // Pump type selection
-    document.getElementById('pumpTypeGroup').addEventListener('click', (e) => {
-      const btn = e.target.closest('.toggle-btn');
-      if (!btn) return;
-
-      document.querySelectorAll('#pumpTypeGroup .toggle-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      state.pumpType = btn.dataset.pump;
-    });
-
-    // Step navigation
-    document.getElementById('nextStep1').addEventListener('click', () => {
-      showPumpPanel(state.pumpType);
-      showStep(2);
-    });
-
-    document.getElementById('prevStep2').addEventListener('click', () => {
-      showStep(1);
-    });
-
-    // Calculations
-    document.getElementById('calcC').addEventListener('click', calculateCentrifugal);
-    document.getElementById('calcI').addEventListener('click', calculateInclined);
-
-    // Results navigation
-    document.getElementById('backToEdit').addEventListener('click', () => {
-      showStep(2);
-    });
-
-    document.getElementById('resetAll').addEventListener('click', () => {
-      document.querySelectorAll('input[type="number"]').forEach(inp => inp.value = '');
-      document.querySelectorAll('input[type="checkbox"]').forEach(chk => chk.checked = true);
-      state = { pumpType: 'centrifugal', results: {} };
-      document.querySelector('[data-pump="centrifugal"]').classList.add('active');
-      document.querySelectorAll('#pumpTypeGroup .toggle-btn').forEach((b, i) => {
-        if (i === 0) b.classList.add('active');
-        else b.classList.remove('active');
-      });
-      showStep(1);
-    });
-
-    // Step tab clicks
-    document.querySelectorAll('.step-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const stepNum = parseInt(tab.dataset.step);
-        if (stepNum <= Object.keys(state.results).length) {
-          showStep(stepNum);
-        }
-      });
-    });
-  </script>
 </body>
 </html>
