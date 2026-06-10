@@ -1157,15 +1157,7 @@
       KasetInno เกษตรอินโน · ระบบน้ำการเกษตร
     </div>
     <h1>คำนวณ <span>Head ปั๊ม</span></h1>
-    <div class="header-sub">หน่วย : เมตร (ม.) | Single Head Calculation System</div>
-    <div class="header-contact">
-      <a href="tel:08524903448">
-        <i class="fas fa-phone"></i> 085-2490348
-      </a>
-      <a href="tel:09250676941">
-        <i class="fas fa-phone"></i> 092-5067694
-      </a>
-    </div>
+    <div class="header-sub">หน่วย : เมตร (ม.)</div>
   </div>
 </header>
 
@@ -1285,29 +1277,99 @@
         <div id="centrifugalFields" style="display:none;">
           <div class="field-row">
             <div class="field">
-              <label><i class="fas fa-water"></i> ความลึกหัวดูดจากผิวน้ำ <span class="unit">(ม.)</span></label>
+              <label>
+                <i class="fas fa-water"></i>
+                ความลึกหัวดูดจากผิวน้ำ <span class="unit">(ม.)</span>
+              </label>
               <div class="input-wrap">
-                <input type="number" id="c_suction_depth" placeholder="4" min="0" step="0.1" oninput="calcStep1()">
+                <input type="number"
+                       id="c_suction_depth"
+                       placeholder="4"
+                       min="0"
+                       step="0.1"
+                       oninput="calcStep1()">
                 <span class="input-unit">ม.</span>
               </div>
             </div>
+        
             <div class="field">
-              <label><i class="fas fa-arrow-up"></i> ความสูงส่งน้ำจากพื้นดิน <span class="unit">(ม.)</span></label>
+              <label>
+                <i class="fas fa-arrow-up"></i>
+                ความสูงส่งน้ำจากพื้นดิน <span class="unit">(ม.)</span>
+              </label>
               <div class="input-wrap">
-                <input type="number" id="c_discharge_height" placeholder="2" min="0" step="0.1" oninput="calcStep1()">
+                <input type="number"
+                       id="c_discharge_height"
+                       placeholder="2"
+                       min="0"
+                       step="0.1"
+                       oninput="calcStep1()">
                 <span class="input-unit">ม.</span>
               </div>
             </div>
           </div>
-
+        
+          <!-- Inclined pipe -->
+          <div class="checkbox-wrapper">
+            <input type="checkbox"
+                   id="hasInclinedC"
+                   onchange="toggleInclinedC()">
+            <label for="hasInclinedC">
+              <i class="fas fa-sliders-h"></i>
+              มีท่อเอียง (inclined pipe)
+            </label>
+          </div>
+        
+          <div id="inclinedFieldsC" style="display:none;">
+            <div class="field-row">
+              <div class="field">
+                <label>
+                  ความยาวท่อเอียง <span class="unit">(ม.)</span>
+                </label>
+                <div class="input-wrap">
+                  <input type="number"
+                         id="c_inclined_len"
+                         placeholder="10"
+                         min="0"
+                         step="0.1"
+                         oninput="calcStep1()">
+                  <span class="input-unit">ม.</span>
+                </div>
+              </div>
+        
+              <div class="field">
+                <label>
+                  มุมองศา <span class="unit">(°)</span>
+                </label>
+                <div class="input-wrap">
+                  <input type="number"
+                         id="c_inclined_angle"
+                         placeholder="37"
+                         min="0"
+                         max="90"
+                         step="1"
+                         oninput="calcStep1()">
+                  <span class="input-unit">°</span>
+                </div>
+              </div>
+            </div>
+        
+            <div class="tip">
+              <i class="fas fa-ruler"></i>
+              <div>
+                วัดมุมด้วยแอปวัดมุม หรือแอป LING (เลือกระบบ Level)
+              </div>
+            </div>
+          </div>
+        
           <div class="computed-inline">
-            <span>Head แนวดิ่ง = ความลึกดูด + ความสูงส่ง</span>
+            <span>
+              Head แนวดิ่ง = ความลึกดูด + ความสูงส่ง + ส่วนสูงจากท่อเอียง
+            </span>
             <span class="val" id="centrifugalResult">— ม.</span>
           </div>
         </div>
 
-      </div>
-    </div>
 
     <div class="btn-row">
       <button class="btn btn-primary" onclick="goStep(2)">
