@@ -1,0 +1,1967 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="เครื่องคำนวณ Head ปั๊มน้ำการเกษตร - KasetInno Agricultural Water System">
+  <meta name="keywords" content="ปั๊ม,หัด,การเกษตร,คำนวณ,น้ำ">
+  <meta name="author" content="KasetInno">
+  <title>คำนวณ Head ปั๊ม | KasetInno</title>
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVJkEZSMUkrQ6usKGiOW03FZ1OFWVE5inMEga+E20R2Do8AmhceArAs8qichDJ+236MwOdCSSIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <style>
+    :root {
+      --green-deep:   #1a4a2e;
+      --green-mid:    #2d7a4f;
+      --green-light:  #4caf78;
+      --green-pale:   #e8f5ed;
+      --earth:        #7a5c3a;
+      --earth-light:  #f5ede3;
+      --sky:          #2e6b8a;
+      --sky-light:    #e4f2f8;
+      --sand:         #faf6ef;
+      --text:         #1a2218;
+      --text-muted:   #6b7c6a;
+      --border:       #d0e4d5;
+      --white:        #ffffff;
+      --red:          #c0392b;
+      --red-light:    #fadbd8;
+      --gold:         #e2a020;
+      --shadow:       0 2px 12px rgba(26,74,46,0.10);
+      --shadow-md:    0 4px 20px rgba(26,74,46,0.15);
+      --radius:       12px;
+      --transition:   all 0.2s ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background: var(--sand);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ──────────────────────────────────
+       HEADER
+       ────────────────────────────────── */
+    header {
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+      padding: 28px 24px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 18px,
+        rgba(255,255,255,0.03) 18px,
+        rgba(255,255,255,0.03) 36px
+      );
+    }
+
+    header::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--green-light);
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .header-label i {
+      font-size: 14px;
+    }
+
+    header h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    header h1 span {
+      color: var(--gold);
+      display: inline-block;
+    }
+
+    .header-sub {
+      font-size: 13px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 8px;
+    }
+
+    .header-contact {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .header-contact a {
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .header-contact a:hover {
+      opacity: 0.8;
+    }
+
+    /* ──────────────────────────────────
+       LAYOUT
+       ────────────────────────────────── */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px 16px 60px;
+    }
+
+    /* ──────────────────────────────────
+       STEP TABS
+       ────────────────────────────────── */
+    .steps {
+      display: flex;
+      gap: 0;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .step-tab {
+      flex: 1;
+      padding: 14px 8px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition);
+      position: relative;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .step-tab:last-child {
+      border-right: none;
+    }
+
+    .step-tab:hover {
+      background: var(--sand);
+    }
+
+    .step-num {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .step-tab.active {
+      background: var(--green-pale);
+      color: var(--green-deep);
+    }
+
+    .step-tab.active .step-num {
+      background: var(--green-mid);
+      color: var(--white);
+      box-shadow: 0 0 0 4px rgba(45, 122, 79, 0.15);
+    }
+
+    .step-tab.done .step-num {
+      background: var(--green-light);
+      color: var(--white);
+    }
+
+    .step-tab.done .step-label {
+      color: var(--green-mid);
+    }
+
+    .step-label {
+      display: block;
+      font-size: 11px;
+    }
+
+    /* ──────────────────────────────────
+       CARDS
+       ────────────────────────────────── */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-header {
+      background: linear-gradient(135deg, var(--green-pale) 0%, rgba(76, 175, 120, 0.05) 100%);
+      border-bottom: 2px solid var(--border);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(45, 122, 79, 0.2);
+    }
+
+    .card-header > div {
+      flex: 1;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 2px;
+    }
+
+    .card-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .card-body {
+      padding: 22px;
+    }
+
+    /* ──────────────────────────────────
+       TOGGLE BUTTONS (PUMP TYPE)
+       ────────────────────────────────── */
+    .toggle-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 14px 12px;
+      border-radius: 10px;
+      border: 2px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: var(--transition);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .toggle-btn:hover {
+      border-color: var(--green-mid);
+      background: var(--green-pale);
+    }
+
+    .toggle-icon {
+      font-size: 24px;
+      display: block;
+    }
+
+    .toggle-btn.active {
+      border-color: var(--green-mid);
+      background: var(--green-pale);
+      color: var(--green-deep);
+      box-shadow: 0 0 0 3px rgba(45, 122, 79, 0.1);
+    }
+
+    /* ──────────────────────────────────
+       FORM FIELDS
+       ────────────────────────────────── */
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .field-row.single {
+      grid-template-columns: 1fr;
+    }
+
+    .field-row.triple {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .field label .unit {
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--earth);
+      font-size: 11px;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--white);
+      transition: var(--transition);
+    }
+
+    .input-wrap:focus-within {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(45, 122, 79, 0.12);
+    }
+
+    .input-wrap input {
+      flex: 1;
+      padding: 11px 12px;
+      border: none;
+      outline: none;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      background: transparent;
+      width: 100%;
+    }
+
+    .input-wrap input::placeholder {
+      color: var(--text-muted);
+      opacity: 0.5;
+    }
+
+    .input-unit {
+      padding: 0 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--green-pale);
+      height: 100%;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid var(--border);
+      white-space: nowrap;
+      font-weight: 600;
+    }
+
+    select.native-select {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7c6a' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      transition: var(--transition);
+    }
+
+    select.native-select:focus {
+      border-color: var(--green-mid);
+      box-shadow: 0 0 0 3px rgba(45, 122, 79, 0.12);
+    }
+
+    select.native-select:hover {
+      border-color: var(--green-mid);
+    }
+
+    /* ──────────────────────────────────
+       CHECKBOX
+       ────────────────────────────────── */
+    .checkbox-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 14px 0;
+      cursor: pointer;
+    }
+
+    .checkbox-wrapper input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--green-mid);
+    }
+
+    .checkbox-wrapper label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    /* ──────────────────────────────────
+       PIPE SECTION
+       ────────────────────────────────── */
+    .pipe-segments {
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .pipe-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: var(--sand);
+      border-radius: 8px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .pipe-row:focus-within {
+      background: var(--white);
+      border-color: var(--green-mid);
+    }
+
+    .pipe-icon {
+      font-size: 16px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .pipe-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      min-width: 70px;
+    }
+
+    .pipe-row .input-wrap {
+      flex: 1;
+    }
+
+    /* ──────────────────────────────────
+       RESULT HEAD STACK
+       ────────────────────────────────── */
+    .result-card {
+      background: linear-gradient(135deg, var(--green-deep) 0%, #0d3a20 100%);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-top: 12px;
+      color: var(--white);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(76, 175, 120, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .result-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .result-title {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .head-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .head-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .head-bar-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.85);
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .head-bar-track {
+      flex: 1;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .head-bar-fill {
+      height: 100%;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      transition: width 0.5s ease;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .bar-vertical {
+      background: linear-gradient(90deg, #2d7a4f 0%, #4caf78 100%);
+    }
+
+    .bar-pipe {
+      background: linear-gradient(90deg, #2e6b8a 0%, #5ba8c8 100%);
+    }
+
+    .bar-outlet {
+      background: linear-gradient(90deg, #7a5c3a 0%, #c49a6c 100%);
+    }
+
+    .head-bar-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.95);
+      min-width: 60px;
+      text-align: right;
+    }
+
+    .result-divider {
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      margin: 20px 0;
+    }
+
+    .result-total-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .result-total-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .result-total-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .result-total-unit {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-left: 8px;
+    }
+
+    .pump-selection {
+      margin-top: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .pump-sel-label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.55);
+      margin-bottom: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .pump-sel-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold);
+    }
+
+    .pump-sel-sub {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 4px;
+    }
+
+    /* ──────────────────────────────────
+       FLOW SECTION
+       ────────────────────────────────── */
+    .flow-result {
+      background: var(--sky-light);
+      border: 1px solid #b5d8ea;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .flow-result-title {
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--sky);
+      font-weight: 600;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .flow-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .flow-item {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 14px;
+      border: 1px solid #b5d8ea;
+      transition: var(--transition);
+    }
+
+    .flow-item:hover {
+      box-shadow: 0 2px 8px rgba(46, 107, 138, 0.1);
+    }
+
+    .flow-item-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .flow-item-value {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--sky);
+    }
+
+    .flow-item-unit {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-left: 4px;
+    }
+
+    /* ──────────────────────────────────
+       BUTTONS
+       ────────────────────────────────── */
+    .btn {
+      padding: 12px 24px;
+      border-radius: 9px;
+      font-family: 'Sarabun', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn i {
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(45, 122, 79, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 16px rgba(45, 122, 79, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--green-mid);
+      border: 2px solid var(--green-mid);
+    }
+
+    .btn-outline:hover {
+      background: var(--green-pale);
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 24px;
+      flex-wrap: wrap;
+    }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: var(--red-light);
+    }
+
+    /* ──────────────────────────────────
+       SECTION PANELS
+       ────────────────────────────────── */
+    .section-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .section-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ──────────────────────────────────
+       TIP BOX
+       ────────────────────────────────── */
+    .tip {
+      background: var(--earth-light);
+      border-left: 4px solid var(--earth);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--earth);
+      margin-top: 12px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .tip i {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .info {
+      background: var(--sky-light);
+      border-left: 4px solid var(--sky);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: var(--sky);
+      margin-top: 12px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .info i {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .warning {
+      background: #fef5e7;
+      border-left: 4px solid #f39c12;
+      border-radius: 0 8px 8px 0;
+      padding: 12px 14px;
+      font-size: 12px;
+      color: #7d6608;
+      margin-top: 12px;
+      line-height: 1.6;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .warning i {
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* ──────────────────────────────────
+       COMPUTED INLINE
+       ────────────────────────────────── */
+    .computed-inline {
+      background: var(--green-pale);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--green-deep);
+      margin-top: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .computed-inline .val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green-mid);
+    }
+
+    /* ──────────────────────────────────
+       SUMMARY TABLE
+       ────────────────────────────────── */
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .summary-table thead tr {
+      background: var(--green-pale);
+    }
+
+    .summary-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--green-deep);
+      font-weight: 700;
+      border: 1px solid var(--border);
+    }
+
+    .summary-table td {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+    }
+
+    .summary-table tbody tr:nth-child(even) {
+      background: var(--sand);
+    }
+
+    .summary-table tbody tr:last-child {
+      background: var(--green-pale);
+      font-weight: 700;
+    }
+
+    .summary-table .numeric {
+      font-family: 'IBM Plex Mono', monospace;
+      font-weight: 600;
+      text-align: right;
+    }
+
+    .summary-table .note {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    /* ──────────────────────────────────
+       RESPONSIVE
+       ────────────────────────────────── */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 26px;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .field-row.triple {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .head-bar-label {
+        width: 100px;
+        font-size: 12px;
+      }
+
+      .result-total-value {
+        font-size: 36px;
+      }
+
+      .flow-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .steps {
+        margin-bottom: 16px;
+      }
+
+      .step-tab {
+        padding: 10px 4px;
+        font-size: 11px;
+      }
+
+      .step-num {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+      }
+
+      .step-label {
+        display: none;
+      }
+
+      .btn-row {
+        justify-content: center;
+      }
+
+      .btn {
+        flex: 1;
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px 12px 40px;
+      }
+
+      header {
+        padding: 16px 12px 12px;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .card-body {
+        padding: 16px;
+      }
+
+      .head-bar-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .head-bar-label {
+        width: 100%;
+      }
+
+      .head-bar-track {
+        width: 100%;
+      }
+
+      .result-total-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .result-total-value {
+        font-size: 32px;
+      }
+
+      .summary-table {
+        font-size: 12px;
+      }
+
+      .summary-table th,
+      .summary-table td {
+        padding: 8px;
+      }
+    }
+
+    /* ──────────────────────────────────
+       PRINT
+       ────────────────────────────────── */
+    @media print {
+      header {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .btn-row {
+        display: none;
+      }
+
+      .steps {
+        display: none;
+      }
+
+      .section-panel {
+        display: block !important;
+      }
+
+      .result-card {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        page-break-inside: avoid;
+      }
+
+      .card {
+        page-break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid var(--border);
+      }
+
+      body {
+        background: white;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-label">
+      <i class="fas fa-leaf"></i>
+      KasetInno เกษตรอินโน · ระบบน้ำการเกษตร
+    </div>
+    <h1>คำนวณ <span>Head ปั๊ม</span></h1>
+    <div class="header-sub">หน่วย : เมตร (ม.) | Single Head Calculation System</div>
+    <div class="header-contact">
+      <a href="tel:08524903448">
+        <i class="fas fa-phone"></i> 085-2490348
+      </a>
+      <a href="tel:09250676941">
+        <i class="fas fa-phone"></i> 092-5067694
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Step tabs -->
+  <div class="steps" id="stepTabs">
+    <button class="step-tab active" onclick="goStep(1)">
+      <span class="step-num">1</span>
+      <span class="step-label">Head แนวดิ่ง</span>
+    </button>
+    <button class="step-tab" onclick="goStep(2)">
+      <span class="step-num">2</span>
+      <span class="step-label">Head ท่อ</span>
+    </button>
+    <button class="step-tab" onclick="goStep(3)">
+      <span class="step-num">3</span>
+      <span class="step-label">Head จ่ายน้ำ</span>
+    </button>
+    <button class="step-tab" onclick="goStep(4)">
+      <span class="step-num">4</span>
+      <span class="step-label">ผลลัพธ์</span>
+    </button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 1 — Vertical Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel active" id="step1">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">💧</div>
+        <div>
+          <div class="card-title">① Head จากระยะส่งน้ำแนวดิ่ง</div>
+          <div class="card-subtitle">เลือกประเภทปั๊มที่ใช้งาน และกรอกข้อมูลระยะทาง</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="info">
+          <i class="fas fa-lightbulb"></i>
+          <div>Head แนวดิ่ง เป็นพลังงานที่ใช้ในการยกน้ำขึ้นจากที่ต่ำไปยังที่สูง</div>
+        </div>
+
+        <!-- Pump type toggle -->
+        <div class="toggle-group" style="margin-top: 16px;">
+          <button class="toggle-btn active" id="btnBaadal" onclick="setPumpType('borewell')">
+            <span class="toggle-icon">🕳️</span>ปั๊มบาดาล
+          </button>
+          <button class="toggle-btn" id="btnCentrifugal" onclick="setPumpType('centrifugal')">
+            <span class="toggle-icon">🌀</span>ปั๊มหอยโข่ง
+          </button>
+        </div>
+
+        <!-- Borewell fields -->
+        <div id="borewellFields">
+          <div class="field-row triple">
+            <div class="field">
+              <label><i class="fas fa-arrow-down"></i> ระยะสูบน้ำ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_pump_depth" placeholder="20" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label><i class="fas fa-water"></i> ระดับน้ำปากบ่อ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_well_level" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label><i class="fas fa-arrow-up"></i> ความสูงแนวดิ่ง <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="b_vertical_height" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Inclined pipe -->
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="hasInclined" onchange="toggleInclined()">
+            <label for="hasInclined"><i class="fas fa-sliders-h"></i> มีท่อเอียง (inclined pipe)</label>
+          </div>
+
+          <div id="inclinedFields" style="display:none;">
+            <div class="field-row">
+              <div class="field">
+                <label>ความยาวท่อเอียง <span class="unit">(ม.)</span></label>
+                <div class="input-wrap">
+                  <input type="number" id="b_inclined_len" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                  <span class="input-unit">ม.</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>มุมองศา <span class="unit">(°)</span></label>
+                <div class="input-wrap">
+                  <input type="number" id="b_inclined_angle" placeholder="37" min="0" max="90" step="1" oninput="calcStep1()">
+                  <span class="input-unit">°</span>
+                </div>
+              </div>
+            </div>
+            <div class="tip">
+              <i class="fas fa-ruler"></i>
+              <div>วัดมุมด้วยแอปวัดมุม หรือแอป LING (เลือกระบบ Level)</div>
+            </div>
+          </div>
+
+          <div class="computed-inline" id="borewellFormula">
+            <span>Head แนวดิ่ง = ระยะสูบ + ปากบ่อ + ความสูงส่ง</span>
+            <span class="val" id="borewellResult">— ม.</span>
+          </div>
+        </div>
+
+        <!-- Centrifugal fields -->
+        <div id="centrifugalFields" style="display:none;">
+          <div class="field-row">
+            <div class="field">
+              <label><i class="fas fa-water"></i> ความลึกหัวดูดจากผิวน้ำ <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="c_suction_depth" placeholder="4" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label><i class="fas fa-arrow-up"></i> ความสูงส่งน้ำจากพื้นดิน <span class="unit">(ม.)</span></label>
+              <div class="input-wrap">
+                <input type="number" id="c_discharge_height" placeholder="2" min="0" step="0.1" oninput="calcStep1()">
+                <span class="input-unit">ม.</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="computed-inline">
+            <span>Head แนวดิ่ง = ความลึกดูด + ความสูงส่ง</span>
+            <span class="val" id="centrifugalResult">— ม.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goStep(2)">
+        ถัดไป: Head ท่อ <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 2 — Pipe Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🔧</div>
+        <div>
+          <div class="card-title">② Head จากความยาวท่อ</div>
+          <div class="card-subtitle">กรอกความยาวท่อทุกส่วน แล้วเลือกขนาดท่อส่ง</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="warning">
+          <i class="fas fa-exclamation-triangle"></i>
+          <div><strong>ห้ามลดขนาดท่อส่ง</strong> — ความยาวท่อรวม = ท่อแนวดิ่ง + แนวนอน + แนวเอียง ทุกส่วนรวมกัน</div>
+        </div>
+
+        <div style="margin-top: 16px;">
+          <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+            <i class="fas fa-info-circle"></i> Head ท่อ คำนวณจากความยาวท่อรวมหารด้วยขนาดท่อ
+          </p>
+        </div>
+
+        <div class="pipe-segments" id="pipeSegments">
+          <div class="pipe-row">
+            <span class="pipe-icon">⬆️</span>
+            <span class="pipe-label">แนวดิ่ง</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_vertical" placeholder="4" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+          <div class="pipe-row">
+            <span class="pipe-icon">➡️</span>
+            <span class="pipe-label">แนวนอน</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_horizontal" placeholder="10" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+          <div class="pipe-row">
+            <span class="pipe-icon">↗️</span>
+            <span class="pipe-label">แนวเอียง</span>
+            <div class="input-wrap">
+              <input type="number" id="pipe_inclined" placeholder="6" min="0" step="0.1" oninput="calcPipe()">
+              <span class="input-unit">ม.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label><i class="fas fa-ruler-combined"></i> ขนาดท่อส่ง</label>
+          <select class="native-select" id="pipe_size" onchange="calcPipe()">
+            <option value="15">1.5 นิ้ว (÷ 15)</option>
+            <option value="20" selected>2 นิ้ว (÷ 20)</option>
+            <option value="30">3 นิ้ว (÷ 30)</option>
+            <option value="40">4 นิ้ว (÷ 40)</option>
+          </select>
+        </div>
+
+        <div class="computed-inline">
+          <span>
+            <span id="pipeFormula">ความยาวรวม ÷ 20</span>
+            &nbsp;=&nbsp;
+            <span id="pipeTotalLen" style="font-weight:600;">0</span> ม.
+          </span>
+          <span class="val" id="pipeResult">— ม.</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(1)">
+        <i class="fas fa-arrow-left"></i> ย้อนกลับ
+      </button>
+      <button class="btn btn-primary" onclick="goStep(3)">
+        ถัดไป: Head จ่ายน้ำ <i class="fas fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 3 — Outlet Head
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step3">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">🌱</div>
+        <div>
+          <div class="card-title">③ Head จากรูปแบบการจ่ายน้ำ</div>
+          <div class="card-subtitle">เลือกหัวจ่ายน้ำที่ใช้ในแปลง</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="toggle-group">
+          <button class="toggle-btn active" id="btnPVC" onclick="setOutletType('pvc')">
+            <span class="toggle-icon">🚿</span>ปากท่อ PVC
+          </button>
+          <button class="toggle-btn" id="btnDripper" onclick="setOutletType('dripper')">
+            <span class="toggle-icon">💧</span>หัวน้ำหยด
+          </button>
+          <button class="toggle-btn" id="btnSprinkler" onclick="setOutletType('sprinkler')">
+            <span class="toggle-icon">🌧️</span>สปริงเกอร์
+          </button>
+        </div>
+
+        <!-- PVC -->
+        <div id="outletPVC">
+          <div class="computed-inline">
+            <span>ปากท่อ PVC ไม่มีแรงดันเพิ่ม</span>
+            <span class="val">0 ม.</span>
+          </div>
+        </div>
+
+        <!-- Dripper -->
+        <div id="outletDripper" style="display:none;">
+          <div class="field">
+            <label><i class="fas fa-droplet"></i> แรงดันใช้งานหัวน้ำหยด <span class="unit">(บาร์)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="dripper_bar" placeholder="0.5" min="0" step="0.1" oninput="calcOutlet()">
+              <span class="input-unit">บาร์</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="fas fa-search"></i>
+            <div>ค้นหาแรงดันใช้งาน (บาร์) ได้จาก Google หรือ ChatGPT ตามรุ่นหัวน้ำหยดที่ใช้งาน</div>
+          </div>
+          <div class="computed-inline">
+            <span>แรงดัน (บาร์) × 10 = Head</span>
+            <span class="val" id="dripperResult">— ม.</span>
+          </div>
+        </div>
+
+        <!-- Sprinkler -->
+        <div id="outletSprinkler" style="display:none;">
+          <div class="field">
+            <label><i class="fas fa-shower"></i> แรงดันใช้งานสปริงเกอร์ <span class="unit">(บาร์)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="sprinkler_bar" placeholder="1.0" min="0" step="0.1" oninput="calcOutlet()">
+              <span class="input-unit">บาร์</span>
+            </div>
+          </div>
+          <div class="info">
+            <i class="fas fa-search"></i>
+            <div>ค้นหาแรงดันใช้งาน (บาร์) ได้จาก Google หรือ ChatGPT ตามรุ่นสปริงเกอร์ที่ใช้งาน</div>
+          </div>
+          <div class="computed-inline">
+            <span>แรงดัน (บาร์) × 10 = Head</span>
+            <span class="val" id="sprinklerResult">— ม.</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Flow calculation (bonus) -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <div>
+          <div class="card-title">คำนวณพื้นที่ / จำนวนโซน (เพิ่มเติม)</div>
+          <div class="card-subtitle">ใส่อัตราการไหลของปั๊มที่เลือก</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="field-row">
+          <div class="field">
+            <label><i class="fas fa-water"></i> อัตราการไหลปั๊ม <span class="unit">(คิว/ชม)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_pump" placeholder="12" min="0" step="0.1" oninput="calcFlow()">
+              <span class="input-unit">คิว/ชม</span>
+            </div>
+          </div>
+
+          <div id="fieldDripperArea" class="field">
+            <label><i class="fas fa-field"></i> พื้นที่ทั้งหมด <span class="unit">(ไร่)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_area" placeholder="4" min="0" step="0.1" oninput="calcFlow()">
+              <span class="input-unit">ไร่</span>
+            </div>
+          </div>
+
+          <div id="fieldSprinklerCount" class="field" style="display:none;">
+            <label><i class="fas fa-hashtag"></i> จำนวนหัวทั้งหมด <span class="unit">(หัว)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_sprinkler_total" placeholder="300" min="0" step="1" oninput="calcFlow()">
+              <span class="input-unit">หัว</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="fieldSprinklerRate" style="display:none; margin-bottom:12px;">
+          <div class="field">
+            <label><i class="fas fa-shower"></i> อัตราการไหลต่อหัว <span class="unit">(L/H)</span></label>
+            <div class="input-wrap">
+              <input type="number" id="flow_sprinkler_per_head" placeholder="120" min="0" step="1" oninput="calcFlow()">
+              <span class="input-unit">L/H</span>
+            </div>
+          </div>
+        </div>
+
+        <div id="flowResult" style="display:none;" class="flow-result">
+          <div class="flow-result-title">
+            <i class="fas fa-chart-bar"></i> ผลการคำนวณการไหล
+          </div>
+          <div class="flow-grid" id="flowGrid"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-outline" onclick="goStep(2)">
+        <i class="fas fa-arrow-left"></i> ย้อนกลับ
+      </button>
+      <button class="btn btn-primary" onclick="goStep(4)">
+        ดูผลลัพธ์ <i class="fas fa-eye"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       STEP 4 — Summary
+       ══════════════════════════════════════════ -->
+  <div class="section-panel" id="step4">
+
+    <div class="result-card">
+      <div class="result-title">
+        <i class="fas fa-chart-pie"></i> สรุปผล HEAD ปั๊ม
+      </div>
+
+      <div class="head-stack">
+        <!-- Vertical -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">① Head แนวดิ่ง</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-vertical" id="barVertical" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valVertical">—</div>
+        </div>
+        <!-- Pipe -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">② Head ท่อ</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-pipe" id="barPipe" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valPipe">—</div>
+        </div>
+        <!-- Outlet -->
+        <div class="head-bar-row">
+          <div class="head-bar-label">③ Head จ่ายน้ำ</div>
+          <div class="head-bar-track">
+            <div class="head-bar-fill bar-outlet" id="barOutlet" style="width:0%"></div>
+          </div>
+          <div class="head-bar-value" id="valOutlet">—</div>
+        </div>
+      </div>
+
+      <hr class="result-divider">
+
+      <div class="result-total-row">
+        <div class="result-total-label">HEAD ปั๊ม รวม</div>
+        <div>
+          <span class="result-total-value" id="totalHead">—</span>
+          <span class="result-total-unit">เมตร</span>
+        </div>
+      </div>
+
+      <div class="pump-selection">
+        <div class="pump-sel-label">เกณฑ์เลือกปั๊ม (Head Max × 70% > Head ปั๊ม)</div>
+        <div class="pump-sel-value" id="pumpMinHead">— ม.</div>
+        <div class="pump-sel-sub" id="pumpMinHeadSub">ต้องการปั๊มที่มี Head Max อย่างน้อย …</div>
+      </div>
+    </div>
+
+    <!-- Formula breakdown -->
+    <div class="card" style="margin-top:16px;">
+      <div class="card-header">
+        <div class="card-icon">🧮</div>
+        <div>
+          <div class="card-title">สูตรคำนวณ</div>
+          <div class="card-subtitle">รายละเอียดการคำนวณแต่ละองค์ประกอบ</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="summary-table" id="summaryTable">
+          <thead>
+            <tr>
+              <th>องค์ประกอบ</th>
+              <th style="text-align:right;">ค่า (ม.)</th>
+              <th>หมายเหตุ</th>
+            </tr>
+          </thead>
+          <tbody id="summaryBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="btn-row" style="justify-content:space-between;">
+      <button class="btn btn-reset" onclick="resetAll()">
+        <i class="fas fa-redo"></i> เริ่มใหม่
+      </button>
+      <button class="btn btn-outline" onclick="goStep(3)">
+        <i class="fas fa-arrow-left"></i> แก้ไข
+      </button>
+      <button class="btn btn-primary" onclick="printCalc()">
+        <i class="fas fa-print"></i> พิมพ์ / บันทึก
+      </button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════
+// State Management
+// ══════════════════════════════════════
+let state = {
+  pumpType: 'borewell',
+  outletType: 'pvc',
+  headVertical: 0,
+  headPipe: 0,
+  headOutlet: 0,
+};
+
+let currentStep = 1;
+
+// ══════════════════════════════════════
+// Step Navigation
+// ══════════════════════════════════════
+function goStep(n) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    t.classList.remove('active', 'done');
+    const num = i + 1;
+    if (num < n) t.classList.add('done');
+    if (num === n) t.classList.add('active');
+  });
+
+  // Update step numbers
+  document.querySelectorAll('.step-tab').forEach((t, i) => {
+    const sn = t.querySelector('.step-num');
+    if (t.classList.contains('done')) sn.innerHTML = '<i class="fas fa-check"></i>';
+    else sn.textContent = i + 1;
+  });
+
+  currentStep = n;
+  if (n === 4) renderResults();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ══════════════════════════════════════
+// Pump Type
+// ══════════════════════════════════════
+function setPumpType(type) {
+  state.pumpType = type;
+  document.getElementById('btnBaadal').classList.toggle('active', type === 'borewell');
+  document.getElementById('btnCentrifugal').classList.toggle('active', type === 'centrifugal');
+  document.getElementById('borewellFields').style.display = type === 'borewell' ? '' : 'none';
+  document.getElementById('centrifugalFields').style.display = type === 'centrifugal' ? '' : 'none';
+  calcStep1();
+}
+
+function toggleInclined() {
+  const checked = document.getElementById('hasInclined').checked;
+  document.getElementById('inclinedFields').style.display = checked ? '' : 'none';
+  calcStep1();
+}
+
+function calcStep1() {
+  if (state.pumpType === 'borewell') {
+    const pumpDepth = parseFloat(document.getElementById('b_pump_depth').value) || 0;
+    const wellLevel = parseFloat(document.getElementById('b_well_level').value) || 0;
+    const vertHeight = parseFloat(document.getElementById('b_vertical_height').value) || 0;
+    let inclinedH = 0;
+    
+    if (document.getElementById('hasInclined').checked) {
+      const len = parseFloat(document.getElementById('b_inclined_len').value) || 0;
+      const angle = parseFloat(document.getElementById('b_inclined_angle').value) || 0;
+      inclinedH = len * Math.sin(angle * Math.PI / 180);
+    }
+    
+    const total = pumpDepth + wellLevel + vertHeight + inclinedH;
+    state.headVertical = total;
+    document.getElementById('borewellResult').textContent = total.toFixed(2) + ' ม.';
+  } else {
+    const suctionDepth = parseFloat(document.getElementById('c_suction_depth').value) || 0;
+    const dischHeight = parseFloat(document.getElementById('c_discharge_height').value) || 0;
+    const total = suctionDepth + dischHeight;
+    state.headVertical = total;
+    document.getElementById('centrifugalResult').textContent = total.toFixed(2) + ' ม.';
+  }
+}
+
+// ══════════════════════════════════════
+// Pipe Head
+// ══════════════════════════════════════
+function calcPipe() {
+  const v = parseFloat(document.getElementById('pipe_vertical').value) || 0;
+  const h = parseFloat(document.getElementById('pipe_horizontal').value) || 0;
+  const inc = parseFloat(document.getElementById('pipe_inclined').value) || 0;
+  const total = v + h + inc;
+  const divisor = parseInt(document.getElementById('pipe_size').value) || 20;
+
+  document.getElementById('pipeTotalLen').textContent = total.toFixed(1);
+  document.getElementById('pipeFormula').textContent = `ความยาวรวม ÷ ${divisor}`;
+
+  const head = total / divisor;
+  state.headPipe = head;
+  document.getElementById('pipeResult').textContent = head.toFixed(2) + ' ม.';
+}
+
+// ══════════════════════════════════════
+// Outlet Type & Head
+// ══════════════════════════════════════
+function setOutletType(type) {
+  state.outletType = type;
+  
+  ['pvc', 'dripper', 'sprinkler'].forEach(t => {
+    const btn = document.getElementById('btn' + t.charAt(0).toUpperCase() + t.slice(1));
+    const outlet = document.getElementById('outlet' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (btn) btn.classList.remove('active');
+    if (outlet) outlet.style.display = 'none';
+  });
+  
+  const btn = document.getElementById('btn' + type.charAt(0).toUpperCase() + type.slice(1));
+  const outlet = document.getElementById('outlet' + type.charAt(0).toUpperCase() + type.slice(1));
+  if (btn) btn.classList.add('active');
+  if (outlet) outlet.style.display = '';
+
+  // Show/hide flow fields
+  document.getElementById('fieldDripperArea').style.display = (type === 'dripper') ? '' : 'none';
+  document.getElementById('fieldSprinklerCount').style.display = (type === 'sprinkler') ? '' : 'none';
+  document.getElementById('fieldSprinklerRate').style.display = (type === 'sprinkler') ? '' : 'none';
+
+  if (type === 'pvc') {
+    state.headOutlet = 0;
+  }
+  
+  calcOutlet();
+  calcFlow();
+}
+
+function calcOutlet() {
+  if (state.outletType === 'dripper') {
+    const bar = parseFloat(document.getElementById('dripper_bar').value) || 0;
+    state.headOutlet = bar * 10;
+    document.getElementById('dripperResult').textContent = state.headOutlet.toFixed(1) + ' ม.';
+  } else if (state.outletType === 'sprinkler') {
+    const bar = parseFloat(document.getElementById('sprinkler_bar').value) || 0;
+    state.headOutlet = bar * 10;
+    document.getElementById('sprinklerResult').textContent = state.headOutlet.toFixed(1) + ' ม.';
+  } else {
+    state.headOutlet = 0;
+  }
+}
+
+// ══════════════════════════════════════
+// Flow / Zone Calculation
+// ══════════════════════════════════════
+function calcFlow() {
+  const pumpFlow = parseFloat(document.getElementById('flow_pump').value) || 0;
+  
+  if (pumpFlow <= 0) {
+    document.getElementById('flowResult').style.display = 'none';
+    return;
+  }
+  
+  let items = [];
+  
+  if (state.outletType === 'dripper') {
+    const totalArea = parseFloat(document.getElementById('flow_area').value) || 0;
+    const areaPerCycle = pumpFlow / 6;
+    const zones = totalArea > 0 ? Math.ceil(totalArea / areaPerCycle) : '—';
+    
+    items = [
+      { label: 'อัตราการไหลปั๊ม', value: pumpFlow.toFixed(1), unit: 'คิว/ชม' },
+      { label: 'ไร่ที่ปั๊มทำงานได้ / รอบ', value: areaPerCycle.toFixed(2), unit: 'ไร่' },
+      { label: 'จำนวนโซน', value: typeof zones === 'number' ? zones : '—', unit: 'โซน' },
+      { label: 'อัตราต่อไร่', value: '6', unit: 'คิว/ชม/ไร่' },
+    ];
+  } else if (state.outletType === 'sprinkler') {
+    const totalHeads = parseFloat(document.getElementById('flow_sprinkler_total').value) || 0;
+    const perHeadLH = parseFloat(document.getElementById('flow_sprinkler_per_head').value) || 0;
+    const perHeadQ = perHeadLH / 1000;
+    const headsPerCycle = perHeadQ > 0 ? Math.floor(pumpFlow / perHeadQ) : 0;
+    const zones = (totalHeads > 0 && headsPerCycle > 0) ? Math.ceil(totalHeads / headsPerCycle) : '—';
+    
+    items = [
+      { label: 'อัตราการไหลปั๊ม', value: pumpFlow.toFixed(1), unit: 'คิว/ชม' },
+      { label: 'หัวที่ปั๊มทำงานได้ / รอบ', value: headsPerCycle || '—', unit: 'หัว' },
+      { label: 'จำนวนโซน', value: typeof zones === 'number' ? zones : '—', unit: 'โซน' },
+      { label: 'อัตราต่อหัว', value: perHeadQ ? perHeadQ.toFixed(3) : '—', unit: 'คิว/ชม' },
+    ];
+  } else {
+    document.getElementById('flowResult').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('flowResult').style.display = '';
+  document.getElementById('flowGrid').innerHTML = items.map(it => `
+    <div class="flow-item">
+      <div class="flow-item-label">${it.label}</div>
+      <div>
+        <span class="flow-item-value">${it.value}</span>
+        <span class="flow-item-unit">${it.unit}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════
+// Results Rendering
+// ══════════════════════════════════════
+function renderResults() {
+  const v = state.headVertical;
+  const p = state.headPipe;
+  const o = state.headOutlet;
+  const total = v + p + o;
+  const maxBar = Math.max(v, p, o, 1);
+
+  // Animate bars
+  setTimeout(() => {
+    setBar('barVertical', 'valVertical', v, maxBar);
+    setBar('barPipe', 'valPipe', p, maxBar);
+    setBar('barOutlet', 'valOutlet', o, maxBar);
+  }, 50);
+
+  // Update totals
+  document.getElementById('totalHead').textContent = total.toFixed(2);
+  const minHeadMax = total / 0.7;
+  document.getElementById('pumpMinHead').textContent = minHeadMax.toFixed(1) + ' ม.';
+  document.getElementById('pumpMinHeadSub').textContent =
+    `เลือกปั๊มที่มี Head Max ≥ ${minHeadMax.toFixed(1)} ม. (Head ปั๊ม ÷ 0.7)`;
+
+  // Build summary table
+  const pumpLabel = state.pumpType === 'borewell' ? 'Head แนวดิ่ง (บาดาล)' : 'Head แนวดิ่ง (หอยโข่ง)';
+  const pipeLabel = (() => {
+    const s = document.getElementById('pipe_size');
+    return `Head ท่อ (${s.options[s.selectedIndex].text.split(' ')[0]} นิ้ว)`;
+  })();
+  const outletLabels = {
+    pvc: 'Head จ่ายน้ำ (ปากท่อ)',
+    dripper: 'Head จ่ายน้ำ (หัวหยด)',
+    sprinkler: 'Head จ่ายน้ำ (สปริงเกอร์)'
+  };
+
+  const borewellNote = (() => {
+    if (state.pumpType !== 'borewell') return '';
+    const d = val('b_pump_depth'), w = val('b_well_level'), vh = val('b_vertical_height');
+    const hasInc = document.getElementById('hasInclined').checked;
+    if (hasInc) {
+      const l = val('b_inclined_len'), a = val('b_inclined_angle');
+      const ih = (l * Math.sin(a * Math.PI / 180)).toFixed(2);
+      return `${d} + ${w} + (${vh} + ${ih})`;
+    }
+    return `${d} + ${w} + ${vh}`;
+  })();
+
+  const centrifugalNote = (() => {
+    if (state.pumpType !== 'centrifugal') return '';
+    return `${val('c_suction_depth')} + ${val('c_discharge_height')}`;
+  })();
+
+  const pv = val('pipe_vertical'), ph = val('pipe_horizontal'), pi = val('pipe_inclined');
+  const pdiv = document.getElementById('pipe_size').value;
+  const pipeNote = `(${pv} + ${ph} + ${pi}) ÷ ${pdiv}`;
+
+  const outletNote = state.outletType === 'pvc' ? 'ไม่มีแรงดัน' :
+    state.outletType === 'dripper' ? `${val('dripper_bar')} บาร์ × 10` :
+    `${val('sprinkler_bar')} บาร์ × 10`;
+
+  const rows = [
+    [pumpLabel, v.toFixed(2), state.pumpType === 'borewell' ? borewellNote : centrifugalNote],
+    [pipeLabel, p.toFixed(2), pipeNote],
+    [outletLabels[state.outletType], o.toFixed(2), outletNote],
+    ['<strong>HEAD ปั๊ม รวม</strong>', `<strong>${total.toFixed(2)}</strong>`, ''],
+  ];
+
+  document.getElementById('summaryBody').innerHTML = rows.map((r, i) => `
+    <tr>
+      <td>${r[0]}</td>
+      <td class="numeric">${r[1]}</td>
+      <td class="note">${r[2]}</td>
+    </tr>
+  `).join('');
+}
+
+function setBar(barId, valId, value, maxVal) {
+  const pct = Math.max((value / maxVal) * 88, value > 0 ? 8 : 0);
+  const bar = document.getElementById(barId);
+  const val = document.getElementById(valId);
+  
+  bar.style.width = pct + '%';
+  bar.textContent = value > 0 ? value.toFixed(2) + ' ม.' : '';
+  val.textContent = value.toFixed(2) + ' ม.';
+}
+
+function val(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+
+// ══════════════════════════════════════
+// Reset & Print
+// ══════════════════════════════════════
+function resetAll() {
+  if (!confirm('ต้องการเริ่มต้นใหม่ใช่หรือไม่?')) return;
+  
+  document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
+  document.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+  
+  state = {
+    pumpType: 'borewell',
+    outletType: 'pvc',
+    headVertical: 0,
+    headPipe: 0,
+    headOutlet: 0
+  };
+  
+  setPumpType('borewell');
+  setOutletType('pvc');
+  document.getElementById('inclinedFields').style.display = 'none';
+  document.getElementById('flowResult').style.display = 'none';
+  
+  goStep(1);
+}
+
+function printCalc() {
+  window.print();
+}
+
+// ══════════════════════════════════════
+// Initialization
+// ══════════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  calcStep1();
+  calcPipe();
+});
+</script>
+
+</body>
+</html>
