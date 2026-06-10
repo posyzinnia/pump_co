@@ -1157,15 +1157,7 @@
       KasetInno เกษตรอินโน · ระบบน้ำการเกษตร
     </div>
     <h1>คำนวณ <span>Head ปั๊ม</span></h1>
-    <div class="header-sub">หน่วย : เมตร (ม.) | Single Head Calculation System</div>
-    <div class="header-contact">
-      <a href="tel:08524903448">
-        <i class="fas fa-phone"></i> 085-2490348
-      </a>
-      <a href="tel:09250676941">
-        <i class="fas fa-phone"></i> 092-5067694
-      </a>
-    </div>
+    <div class="header-sub">หน่วย : เมตร (ม.) </div>
   </div>
 </header>
 
@@ -1175,15 +1167,15 @@
   <div class="steps" id="stepTabs">
     <button class="step-tab active" onclick="goStep(1)">
       <span class="step-num">1</span>
-      <span class="step-label">Head แนวดิ่ง</span>
+      <span class="step-label">Head จากระยะส่งน้ำในแนวดิ่ง</span>
     </button>
     <button class="step-tab" onclick="goStep(2)">
       <span class="step-num">2</span>
-      <span class="step-label">Head ท่อ</span>
+      <span class="step-label">Head จากความยาวของท่อ</span>
     </button>
     <button class="step-tab" onclick="goStep(3)">
       <span class="step-num">3</span>
-      <span class="step-label">Head จ่ายน้ำ</span>
+      <span class="step-label">Head จากรูปแบบการจ่ายน้ำ</span>
     </button>
     <button class="step-tab" onclick="goStep(4)">
       <span class="step-num">4</span>
@@ -1297,6 +1289,34 @@
                 <input type="number" id="c_discharge_height" placeholder="2" min="0" step="0.1" oninput="calcStep1()">
                 <span class="input-unit">ม.</span>
               </div>
+            </div>
+          </div>
+            <!-- Inclined pipe -->
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id="hasInclined" onchange="toggleInclined()">
+            <label for="hasInclined"><i class="fas fa-sliders-h"></i> มีท่อเอียง (inclined pipe)</label>
+          </div>
+
+          <div id="inclinedFields" style="display:none;">
+            <div class="field-row">
+              <div class="field">
+                <label>ความยาวท่อเอียง <span class="unit">(ม.)</span></label>
+                <div class="input-wrap">
+                  <input type="number" id="b_inclined_len" placeholder="10" min="0" step="0.1" oninput="calcStep1()">
+                  <span class="input-unit">ม.</span>
+                </div>
+              </div>
+              <div class="field">
+                <label>มุมองศา <span class="unit">(°)</span></label>
+                <div class="input-wrap">
+                  <input type="number" id="b_inclined_angle" placeholder="37" min="0" max="90" step="1" oninput="calcStep1()">
+                  <span class="input-unit">°</span>
+                </div>
+              </div>
+            </div>
+            <div class="tip">
+              <i class="fas fa-ruler"></i>
+              <div>วัดมุมด้วยแอปวัดมุม หรือแอป LING (เลือกระบบ Level)</div>
             </div>
           </div>
 
